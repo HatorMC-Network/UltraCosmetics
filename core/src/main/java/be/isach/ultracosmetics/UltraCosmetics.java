@@ -117,6 +117,8 @@ public class UltraCosmetics extends JavaPlugin {
 
     private PlayerAuctionsHook playerAuctionsHook;
 
+    private ZHeadHook zHeadHook;
+
     private UnmovableItemListener unmovableItemListener;
     private TreasureChestManager treasureChestManager;
     private EntityDismountListener entityDismountListener;
@@ -393,6 +395,11 @@ public class UltraCosmetics extends JavaPlugin {
         chestSortHook = hookIfEnabled("ChestSort", () -> new ChestSortHook(this));
         hookIfEnabled("Towny", TownyHook::new);
         playerAuctionsHook = hookIfEnabled("PlayerAuctions", () -> new PlayerAuctionsHook(this), 1.24f);
+
+        zHeadHook = new ZHeadHook(this);
+        if (zHeadHook.isEnabled()) {
+            getLogger().info("[UltraCosmetics] zHead hook enabled.");
+        }
 
         // Start up bStats
         setupMetrics();
@@ -851,6 +858,10 @@ public class UltraCosmetics extends JavaPlugin {
 
     public ChestSortHook getChestSortHook() {
         return chestSortHook;
+    }
+
+    public ZHeadHook getZHeadHook() {
+        return zHeadHook;
     }
 
     public UnmovableItemListener getUnmovableItemListener() {
