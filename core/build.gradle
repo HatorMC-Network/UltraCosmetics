@@ -72,6 +72,8 @@ dependencies {
     compileOnly files('libs/ChestSortAPI-13.0.0-SNAPSHOT.jar')
     // Shaded by root project
     compileOnly(project(':legacy-events'))
+    // https://github.com/Maxlego08/zHead
+    compileOnly("com.github.Maxlego08:zHead:1.1")
 }
 
 shadowJar {
@@ -97,7 +99,7 @@ bukkit {
     authors = ['datatags']
     main = 'be.isach.ultracosmetics.UltraCosmetics'
     apiVersion = '1.17'
-    softDepend = ['LibsDisguises', 'Vault', 'PlaceholderAPI', 'PlayerPoints', 'WorldGuard', 'Essentials', 'LuckPerms', 'DiscordSRV', 'ChestSort', 'Towny', 'PEconomy', 'PlayerAuctions', 'CoinsEngine', 'Treasury', 'ExcellentEconomy']
+    softDepend = ['LibsDisguises', 'Vault', 'PlaceholderAPI', 'PlayerPoints', 'WorldGuard', 'Essentials', 'LuckPerms', 'DiscordSRV', 'ChestSort', 'Towny', 'PEconomy', 'PlayerAuctions', 'CoinsEngine', 'Treasury', 'ExcellentEconomy', 'zHead']
     commands {
         ultracosmetics {
             aliases = ['uc', 'cosmetics']

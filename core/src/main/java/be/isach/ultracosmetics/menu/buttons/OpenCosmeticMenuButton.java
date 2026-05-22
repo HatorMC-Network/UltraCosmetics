@@ -2,8 +2,10 @@ package be.isach.ultracosmetics.menu.buttons;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
+import be.isach.ultracosmetics.hook.ZHeadHook;
 import be.isach.ultracosmetics.menu.Button;
 import be.isach.ultracosmetics.menu.ClickData;
 import be.isach.ultracosmetics.menu.Menus;
@@ -20,6 +22,8 @@ import org.bukkit.permissions.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 public class OpenCosmeticMenuButton implements Button {
     private final UltraCosmetics ultraCosmetics;
@@ -32,10 +36,34 @@ public class OpenCosmeticMenuButton implements Button {
     public OpenCosmeticMenuButton(UltraCosmetics ultraCosmetics, Category category) {
         this.ultraCosmetics = ultraCosmetics;
         this.category = category;
-        this.baseStack = category.getItemStack();
         this.pm = ultraCosmetics.getPermissionManager();
         this.menus = ultraCosmetics.getMenus();
         this.openPermission = menus.getCategoryMenu(category).getPermission();
+        this.baseStack = resolveBaseStack(ultraCosmetics, category);
+    }
+
+    private static ItemStack resolveBaseStack(UltraCosmetics ultraCosmetics, Category category) {
+        ItemStack base = category.getItemStack();
+        ZHeadHook zHeadHook = ultraCosmetics.getZHeadHook();
+        if (zHeadHook != null && zHeadHook.isEnabled()
+                && SettingsManager.getConfig().getBoolean("zhead-menu-icons.enabled")) {
+            String headId = SettingsManager.getConfig().getString(
+                    "zhead-menu-icons." + category.getConfigPath().toLowerCase(Locale.ROOT), "");
+            if (headId != null && !headId.isBlank()) {
+                Optional<ItemStack> headItem = zHeadHook.getItemStack(headId);
+                if (headItem.isPresent()) {
+                    ItemStack zHead = headItem.get();
+                    ItemMeta baseMeta = base.getItemMeta();
+                    ItemMeta headMeta = zHead.getItemMeta();
+                    if (baseMeta != null && headMeta != null) {
+                        headMeta.setDisplayName(baseMeta.getDisplayName());
+                        zHead.setItemMeta(headMeta);
+                    }
+                    return zHead;
+                }
+            }
+        }
+        return base;
     }
 
     @Override

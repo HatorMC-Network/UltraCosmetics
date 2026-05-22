@@ -576,3 +576,19 @@ Always-Update-Cosmetics-On-World-Change: false
 # The thousands separator to use when displaying money amounts.
 # Set to "" to disable.
 Thousands-Separator: ","
+
+# zHead integration — decorative heads for category buttons in the main menu.
+# Head IDs come from https://minecraft-heads.com (the numeric ID in the URL, as a String).
+# Set a value to "" to use the default material for that category instead.
+zhead-menu-icons:
+  enabled: true
+  hats: ""
+  gadgets: ""
+  pets: ""
+  particle-effects: ""
+  mounts: ""
+  morphs: ""
+  suits: ""
+  emotes: ""
+  projectile-effects: ""
+  death-effects: ""
