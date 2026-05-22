@@ -47,9 +47,9 @@ public class OpenCosmeticMenuButton implements Button {
         ZHeadHook zHeadHook = ultraCosmetics.getZHeadHook();
         if (zHeadHook != null && zHeadHook.isEnabled()
                 && SettingsManager.getConfig().getBoolean("zhead-menu-icons.enabled")) {
-            int headId = SettingsManager.getConfig().getInt(
-                    "zhead-menu-icons." + category.getConfigPath().toLowerCase(Locale.ROOT), -1);
-            if (headId > 0) {
+            String headId = SettingsManager.getConfig().getString(
+                    "zhead-menu-icons." + category.getConfigPath().toLowerCase(Locale.ROOT), "");
+            if (headId != null && !headId.isBlank()) {
                 Optional<ItemStack> headItem = zHeadHook.getItemStack(headId);
                 if (headItem.isPresent()) {
                     ItemStack zHead = headItem.get();

@@ -578,17 +578,17 @@ Always-Update-Cosmetics-On-World-Change: false
 Thousands-Separator: ","
 
 # zHead integration — decorative heads for category buttons in the main menu.
-# Head IDs come from https://minecraft-heads.com (the numeric ID in the URL).
-# Set a value to -1 to use the default material for that category instead.
+# Head IDs come from https://minecraft-heads.com (the numeric ID in the URL, as a String).
+# Set a value to "" to use the default material for that category instead.
 zhead-menu-icons:
   enabled: true
-  hats: -1
-  gadgets: -1
-  pets: -1
-  particle-effects: -1
-  mounts: -1
-  morphs: -1
-  suits: -1
-  emotes: -1
-  projectile-effects: -1
-  death-effects: -1
+  hats: ""
+  gadgets: ""
+  pets: ""
+  particle-effects: ""
+  mounts: ""
+  morphs: ""
+  suits: ""
+  emotes: ""
+  projectile-effects: ""
+  death-effects: ""
