@@ -1,0 +1,10 @@
+* text=auto
+
+*.py text diff=python
+*.java text diff=java
+*.gradle text diff=java
+*.sh text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+
+*.jar binary

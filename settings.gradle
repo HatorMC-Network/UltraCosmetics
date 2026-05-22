@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            url = "./plugins"
+        }
+    }
+}
+rootProject.name = 'UltraCosmetics'
+include 'v1_21_R7', 'core', 'java-21', 'legacy-events', 'nms', 'paper-support'

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew :core:compileJava)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(./gradlew :core:compileJava -Dorg.gradle.java.home=\"C:/Program Files/Zulu/zulu-21\")",
+      "Bash(./gradlew :core:generateBukkitPluginDescription -PjavaVersion=21)",
+      "Bash(git checkout *)",
+      "Bash(git reset *)"
+    ]
+  }
+}
