@@ -27,8 +27,8 @@ Tu mentalidad en cada tarea:
 - Tipo de servidor: Survival semi-vanilla con funciones custom
 - Jugadores diarios: ~40-50 concurrent
 - Stack base: Paper/Folia API
-- Java target: Java 8 (compatibilidad) / Java 17+ segun plugin
-- Build tool: Maven
+- Java target: Java 25
+- Build tool: Gradle
 
 ### Ecosistema de plugins de HatorMC Network
 
@@ -65,9 +65,9 @@ Fuente: https://koyeresolutions.com/guides/git-team-guide.html
 Todo cambio llega a main unicamente via Pull Request con al menos 1 aprobacion. Sin excepciones.
 
 ### Flujo de trabajo estandar
-Tarea identificada -> branch local -> probar en servidor de pruebas -> confirmacion de Gabriel -> commit + push -> PR a main -> revision -> merge
+Tarea identificada -> branch local desde main -> commits en esa branch -> probar en servidor de pruebas -> confirmacion de Gabriel -> push -> PR a main -> revision -> merge
 
-NO existe una rama develop. Las branches apuntan directamente a main.
+NO existe rama develop ni ninguna rama de integracion intermedia. Cada tarea tiene su propia branch creada desde main. Los commits van dentro de esa branch. La branch llega a main unicamente via Pull Request. Nunca se pushea directo a main.
 
 ### Naming de branches
 - Feature:  feature/KY-XX-nombre-descriptivo
@@ -84,7 +84,7 @@ Tipos: feat / fix / refactor / docs / chore / style / perf / test
 Ejemplos:
   feat(gui): agregar cabezas de jugadores como botones en menu cosmeticos [KY-42]
   fix(head-provider): null pointer cuando zHead no esta cargado [KY-55]
-  chore(pom): agregar dependencia zHead via JitPack [KY-42]
+  chore(gradle): agregar dependencia zHead via JitPack [KY-42]
 
 ---
 
@@ -153,10 +153,10 @@ Cuando trabajes en cualquier plugin del ecosistema HatorMC:
 
 PASO 0 - Corroborar SIEMPRE antes de cualquier accion:
 1. git status y git log --oneline -10
-2. git pull origin main
+2. git fetch origin && git pull (actualiza la branch actual, no mergear main en tu branch)
 3. Lee los archivos relevantes al cambio pedido
 4. Busca si ya existe codigo relacionado antes de crear algo nuevo
-5. Verifica las dependencias en pom.xml
+5. Verifica las dependencias en build.gradle
 
 Reglas de operacion:
 1. Lee el diff completo antes de commitear. Nada de git add . a ciegas.
@@ -172,10 +172,10 @@ Flujo obligatorio para CADA tarea:
 3. Hacer el cambio (minimo, quirurgico, sin scope creep)
 4. Probar localmente / servidor de pruebas
 5. Esperar confirmacion de Gabriel
-6. git add -p (interactivo, no git add .)
+6. git add <archivos-especificos> (nunca git add . ni git add -A a ciegas)
 7. Commit con estandares Conventional Commits
 8. Push a branch -> PR a main
 
 ---
 
-Ultima actualizacion: 2026-05-22 | HatorMC Network
+Ultima actualizacion: 2026-05-22 (rev. 2) | HatorMC Network
