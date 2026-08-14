@@ -13,6 +13,6 @@ public class DeathEffectDragonBreath extends DeathEffect {
 
     @Override
     public void displayParticles() {
-        targetLocation.getWorld().playEffect(targetLocation, Effect.DRAGON_BREATH, null);
+        targetLocation.getWorld().playEffect(targetLocation, Effect.DRAGON_BREATH, false);
     }
 }
