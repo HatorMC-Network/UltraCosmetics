@@ -10,6 +10,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PetPathfinder;
+import be.isach.ultracosmetics.util.SmartLogger.LogLevel;
 import com.cryptomorin.xseries.XAttribute;
 import com.cryptomorin.xseries.XEntityType;
 import com.cryptomorin.xseries.XMaterial;
@@ -90,11 +91,25 @@ public class Pet extends EntityCosmetic<PetType, Mob> implements Updatable {
 
     @Override
     protected void onEquip() {
+        // If this fails, entity stays null and run() unequips the pet on the next tick.
         initializeEntity();
     }
 
-    private void initializeEntity() {
+    /**
+     * Spawns the pet entity and applies all of its settings.
+     *
+     * @return true if the entity was spawned. If false, {@link #entity} is left null
+     *         and the pet must not be used any further.
+     */
+    private boolean initializeEntity() {
         entity = spawnEntity();
+        // Another plugin (or the server itself) can refuse the spawn, in which case
+        // spawnEntity() returns null. Bail out before we start dereferencing it.
+        if (entity == null) {
+            getUltraCosmetics().getSmartLogger().write(LogLevel.WARNING, "Failed to spawn pet "
+                    + getType().getConfigName() + " for " + getOwnerUniqueId() + ", the spawn was refused.");
+            return false;
+        }
 
         if (entity instanceof Ageable ageable) {
             if (SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) {
@@ -135,6 +150,7 @@ public class Pet extends EntityCosmetic<PetType, Mob> implements Updatable {
         if (customization != null) {
             customize(customization);
         }
+        return true;
     }
 
     private EntityBrain clearPathfinders(Mob entity) {
@@ -169,7 +185,13 @@ public class Pet extends EntityCosmetic<PetType, Mob> implements Updatable {
 
     @Override
     public void run() {
-        if (entity != null && !entity.isValid()) {
+        // The entity is null when it couldn't be spawned. It will never come back on its own,
+        // so unequip the pet instead of letting this task run forever on a null entity.
+        if (entity == null) {
+            clear();
+            return;
+        }
+        if (!entity.isValid()) {
             if (invalidBypassTicks > 0) {
                 invalidBypassTicks--;
                 return;
@@ -188,7 +210,19 @@ public class Pet extends EntityCosmetic<PetType, Mob> implements Updatable {
         // the entity anyway, so we do it manually to keep pathfinders working correctly.
         if (entity.getWorld() != getPlayer().getWorld()) {
             removeEntity();
-            initializeEntity();
+            boolean respawned;
+            try {
+                respawned = initializeEntity();
+            } catch (Exception e) {
+                getUltraCosmetics().getSmartLogger().write(LogLevel.ERROR,
+                        "Failed to respawn pet " + getType().getConfigName() + " after a world change:");
+                e.printStackTrace();
+                respawned = false;
+            }
+            if (!respawned) {
+                clear();
+                return;
+            }
         }
 
         if (SettingsManager.getConfig().getBoolean("Airlift-Pets")) {
@@ -242,8 +276,11 @@ public class Pet extends EntityCosmetic<PetType, Mob> implements Updatable {
     @Override
     protected void onClear() {
         if (airlift != null) {
-            entity.setLeashHolder(null);
+            if (entity != null) {
+                entity.setLeashHolder(null);
+            }
             removeEntitySafe(airlift);
+            airlift = null;
         }
 
         // Remove Armor Stand.
@@ -355,7 +392,8 @@ public class Pet extends EntityCosmetic<PetType, Mob> implements Updatable {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         // If the player teleported to a different world, they will be respawned
         // by the main Pet task.
-        if (event.getPlayer() == getPlayer() && event.getFrom().getWorld() == event.getTo().getWorld()) {
+        if (entity != null && event.getPlayer() == getPlayer()
+                && event.getFrom().getWorld() == event.getTo().getWorld()) {
             getUltraCosmetics().getScheduler().teleportAsync(entity, event.getTo());
             invalidBypassTicks = 20;
         }
