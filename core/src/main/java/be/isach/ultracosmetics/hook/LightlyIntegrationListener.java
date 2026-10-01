@@ -80,8 +80,11 @@ public class LightlyIntegrationListener implements Listener {
         };
         // On reconnect, UC's profile may not be loaded yet — defer until it is.
         // For a normal /vanish, profile is already loaded; run immediately.
+        // El re-equipado de UltraPlayer#load corre un tick despues de cargar el perfil: se
+        // suspende un tick mas tarde para que siempre vaya DESPUES de ese equip y no antes
+        // (si no, los cosmeticos quedaban puestos pese al vanish restaurado).
         if (event.isReconnect()) {
-            up.getProfile().onLoad(p -> action.run());
+            up.getProfile().onLoad(p -> uc.getScheduler().runNextTick(t -> action.run()));
         } else {
             action.run();
         }
