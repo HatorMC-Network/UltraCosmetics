@@ -10,9 +10,11 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
@@ -22,8 +24,9 @@ public abstract class CosmeticsProfile {
     protected final UltraCosmetics ultraCosmetics;
     protected final PlayerData data;
     protected final AtomicBoolean loaded = new AtomicBoolean();
-    protected Consumer<CosmeticsProfile> onLoad = p -> {
-    };
+    // Varios callbacks se corren en orden de registro: antes habia uno solo y un segundo
+    // onLoad (ej: el de Vanish-Integration al reconectar) pisaba al que re-equipa cosmeticos.
+    protected final List<Consumer<CosmeticsProfile>> onLoadCallbacks = new CopyOnWriteArrayList<>();
 
     public CosmeticsProfile(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
         this.ultraPlayer = ultraPlayer;
@@ -34,7 +37,7 @@ public abstract class CosmeticsProfile {
             load();
             synchronized (loaded) {
                 loaded.set(true);
-                ultraCosmetics.getScheduler().runNextTick((inner) -> onLoad.accept(this));
+                ultraCosmetics.getScheduler().runNextTick((inner) -> onLoadCallbacks.forEach(c -> c.accept(this)));
             }
         });
     }
@@ -45,7 +48,7 @@ public abstract class CosmeticsProfile {
                 onLoad.accept(this);
                 return;
             }
-            this.onLoad = onLoad;
+            onLoadCallbacks.add(onLoad);
         }
     }
 
@@ -56,6 +59,7 @@ public abstract class CosmeticsProfile {
     public void equip() {
         if (!ultraPlayer.isOnline()) return;
         if (!SettingsManager.isAllowedWorld(ultraPlayer.getBukkitPlayer().getWorld())) return;
+        if (ultraPlayer.isCosmeticsSuspended()) return;
         ultraPlayer.withPreserveEquipped(() -> {
             for (Entry<Category, CosmeticType<?>> type : data.getEnabledCosmetics().entrySet()) {
                 if (type.getValue() != null && type.getKey().isEnabled() && type.getValue().isEnabled()) {

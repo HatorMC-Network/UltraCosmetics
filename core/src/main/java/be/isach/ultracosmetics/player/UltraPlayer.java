@@ -89,6 +89,12 @@ public class UltraPlayer {
     private boolean preserveEquipped = false;
 
     /**
+     * Set while an integration (e.g. staff vanish) requires the player to stay without cosmetics.
+     * While true, {@link CosmeticsProfile#equip()} (join, respawn, world change) does nothing.
+     */
+    private boolean cosmeticsSuspended = false;
+
+    /**
      * Stores the client brand string.
      * Used for determining if player is a Geyser client.
      */
@@ -618,6 +624,17 @@ public class UltraPlayer {
      */
     public boolean isPreserveEquipped() {
         return preserveEquipped;
+    }
+
+    /**
+     * @return true if profile re-equips are blocked for this player.
+     */
+    public boolean isCosmeticsSuspended() {
+        return cosmeticsSuspended;
+    }
+
+    public void setCosmeticsSuspended(boolean cosmeticsSuspended) {
+        this.cosmeticsSuspended = cosmeticsSuspended;
     }
 
     /**

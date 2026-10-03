@@ -74,13 +74,25 @@ public class LightlyIntegrationListener implements Listener {
         if (!SettingsManager.getConfig().getBoolean(VANISH_ROOT + ".Enabled")) return;
         UltraPlayer up = uc.getPlayerManager().getUltraPlayer(event.getPlayer());
         if (up == null) return;
+        // Block profile re-equips (join, respawn, world change) until unvanish, no matter
+        // whether they run before or after the suspension below.
+        up.setCosmeticsSuspended(true);
+        boolean reconnect = event.isReconnect();
         Runnable action = () -> {
+            if (!up.isOnline()) return;
             Set<Category> suspended = suspend(up, (cat, cosmetic) -> true);
+            if (reconnect) {
+                // The join re-equip may not have run yet (and is now blocked):
+                // remember everything the profile has enabled so unvanish restores it.
+                for (Category cat : Category.values()) {
+                    if (up.getProfile().getEnabledCosmetic(cat) != null) suspended.add(cat);
+                }
+            }
             if (!suspended.isEmpty()) vanishSuspended.put(up.getUUID(), suspended);
         };
         // On reconnect, UC's profile may not be loaded yet — defer until it is.
         // For a normal /vanish, profile is already loaded; run immediately.
-        if (event.isReconnect()) {
+        if (reconnect) {
             up.getProfile().onLoad(p -> action.run());
         } else {
             action.run();
@@ -90,9 +102,10 @@ public class LightlyIntegrationListener implements Listener {
     @EventHandler
     public void onUnvanish(PlayerUnvanishEvent event) {
         Set<Category> cats = vanishSuspended.remove(event.getPlayer().getUniqueId());
-        if (cats == null) return;
         UltraPlayer up = uc.getPlayerManager().getUltraPlayer(event.getPlayer());
         if (up == null) return;
+        up.setCosmeticsSuspended(false);
+        if (cats == null) return;
         restore(up, cats);
     }
 
