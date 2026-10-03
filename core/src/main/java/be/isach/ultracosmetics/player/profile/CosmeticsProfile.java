@@ -10,9 +10,9 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -59,6 +59,7 @@ public abstract class CosmeticsProfile {
     public void equip() {
         if (!ultraPlayer.isOnline()) return;
         if (!SettingsManager.isAllowedWorld(ultraPlayer.getBukkitPlayer().getWorld())) return;
+        if (ultraPlayer.isCosmeticsSuspended()) return;
         ultraPlayer.withPreserveEquipped(() -> {
             for (Entry<Category, CosmeticType<?>> type : data.getEnabledCosmetics().entrySet()) {
                 if (type.getValue() != null && type.getKey().isEnabled() && type.getValue().isEnabled()) {
