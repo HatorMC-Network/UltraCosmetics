@@ -64,6 +64,13 @@ public abstract class Cosmetic<T extends CosmeticType<?>> implements Listener {
             MessageManager.send(player, "Not-Allowed-In-Vanish");
             return;
         }
+        // Staff in vanish (Lightly): remember the choice in the profile but don't spawn it;
+        // it gets activated on unvanish (see LightlyIntegrationListener#onUnvanish).
+        if (owner.isCosmeticsSuspended() && !owner.isPreserveEquipped()) {
+            owner.getProfile().setEnabledCosmetic(category, cosmeticType);
+            MessageManager.send(player, "Cosmetic-Deferred-In-Vanish");
+            return;
+        }
         CosmeticRegionState state = ultraCosmetics.getWorldGuardManager().allowedCosmeticsState(player, category);
         if (state == CosmeticRegionState.BLOCKED_ALL) {
             MessageManager.send(player, "Region-Disabled");

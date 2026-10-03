@@ -1878,6 +1878,7 @@ Region-Disabled: <prefix> <bold><red>Cosmetics esta desactivado en este area!
 Region-Disabled-Category: <prefix> <bold><red><category> cosmetics estan desactivados en este area!
 Disabled-Command-Message: <prefix> <bold><red>No puedes usar este comando cuando tienes ese cosmetics equipado!
 Not-Allowed-In-Vanish: <prefix> <bold><red>No puedes usar ese comando mientras estes Vanish!
+Cosmetic-Deferred-In-Vanish: <prefix> <yellow>Estas en vanish: tu cosmetico se activara cuando salgas de el.
 Too-Long: Demasiado largo, inténtelo de nuevo
 Cannot-Disable-Gadgets: <prefix> <bold><red>No puedes deshabilitar gadgets.
 Must-Remove:

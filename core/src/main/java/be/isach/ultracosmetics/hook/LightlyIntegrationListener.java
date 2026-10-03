@@ -105,7 +105,11 @@ public class LightlyIntegrationListener implements Listener {
         UltraPlayer up = uc.getPlayerManager().getUltraPlayer(event.getPlayer());
         if (up == null) return;
         up.setCosmeticsSuspended(false);
-        if (cats == null) return;
+        // Also restore cosmetics picked while in vanish: they only exist in the profile.
+        if (cats == null) cats = EnumSet.noneOf(Category.class);
+        for (Category cat : Category.values()) {
+            if (up.getProfile().getEnabledCosmetic(cat) != null) cats.add(cat);
+        }
         restore(up, cats);
     }
 
