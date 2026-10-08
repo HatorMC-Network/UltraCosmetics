@@ -1872,6 +1872,7 @@ Region-Disabled: <prefix> <bold><red>Kosmetiikat eivät ole käytössä tääll�
 Region-Disabled-Category: <prefix> <bold><red><category> cosmetics are disabled in this area!
 Disabled-Command-Message: <prefix> <bold><red>Et voi käyttää tuota komentoa kun käytät kosmetiikkaa!
 Not-Allowed-In-Vanish: <prefix> <bold><red>You can't use cosmetics while in vanish!
+Cosmetic-Deferred-In-Vanish: <prefix> <yellow>You're in vanish: your cosmetic will activate when you leave it.
 Too-Long: Too long, try again
 Cannot-Disable-Gadgets: <prefix> <bold><red>You cannot disable gadgets.
 Must-Remove:

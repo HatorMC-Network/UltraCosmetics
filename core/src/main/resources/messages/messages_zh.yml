@@ -1859,6 +1859,7 @@ Region-Disabled: <prefix> <bold><red>装饰品在这个区域已被禁用！
 Region-Disabled-Category: <prefix> <bold><red><category> 的装饰品在这个区域已被禁用！
 Disabled-Command-Message: <prefix> <bold><red>当你佩戴装饰品时你不能使用该指令！
 Not-Allowed-In-Vanish: <prefix> <bold><red>你在隐身时不能使用装饰品！
+Cosmetic-Deferred-In-Vanish: <prefix> <yellow>You're in vanish: your cosmetic will activate when you leave it.
 Too-Long: 太长, 请重试
 Cannot-Disable-Gadgets: <prefix> <bold><red>你不能禁用小道具.
 Must-Remove:

@@ -110,6 +110,9 @@ public class LightlyIntegrationListener implements Listener {
         for (Category cat : Category.values()) {
             if (up.getProfile().getEnabledCosmetic(cat) != null) cats.add(cat);
         }
+        // Still in combat: leave combat-suspended categories for onExitCombat.
+        Set<Category> inCombat = combatSuspended.get(up.getUUID());
+        if (inCombat != null) cats.removeAll(inCombat);
         restore(up, cats);
     }
 

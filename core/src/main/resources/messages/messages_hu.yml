@@ -1866,6 +1866,7 @@ Region-Disabled: <prefix><bold><red>A kozmetikumok ki vannak kapcsolva ezen a te
 Region-Disabled-Category: <prefix><bold><red><category> kozmetikumok ki vannak kapcsolva ezen a területen!
 Disabled-Command-Message: <prefix><bold><red>Nem használhatod ezt a parancsot miközben kozmetikumokat használsz!
 Not-Allowed-In-Vanish: <prefix><bold><red>Nem használsz kozmetikumokat amíg láthatatlan vagy!
+Cosmetic-Deferred-In-Vanish: <prefix> <yellow>You're in vanish: your cosmetic will activate when you leave it.
 Too-Long: Túl hosszú, próbáld újra
 Cannot-Disable-Gadgets: <prefix><bold><red>Nem kapcsolhatod ki a kütyüket.
 Must-Remove:
