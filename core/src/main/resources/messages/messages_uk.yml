@@ -1872,6 +1872,7 @@ Region-Disabled: <prefix> <bold><red>Косметика вимкнена в ці
 Region-Disabled-Category: <prefix> <bold><red><category> косметика в цій зоні вимкнена!
 Disabled-Command-Message: <prefix> <bold><red>Ви не можете використовувати цю команду, поки косметика активована!
 Not-Allowed-In-Vanish: <prefix> <bold><red>Ви не можете користуватися косметикою під час невидимості!
+Cosmetic-Deferred-In-Vanish: <prefix> <yellow>You're in vanish: your cosmetic will activate when you leave it.
 Too-Long: Задовго, спробуйте ще раз
 Cannot-Disable-Gadgets: <prefix> <bold><red>Ви не можете вимкнути гаджети.
 Must-Remove:
